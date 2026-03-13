@@ -19,24 +19,24 @@ public class Asistencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Fecha y hora obligatoria")
+
     private LocalDateTime fechaHoraIngreso;
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SedeAsistida")
+    @JoinColumn(name = "SedeAsistida_id")
     private Sede sede;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ClaseAsistida")
+    @JoinColumn(name = "ClaseAsistida_id")
     private Clase clase;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Reserva")
+    @JoinColumn(name = "Reserva_id")
     private Reserva reserva;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SocioPlan")
+    @JoinColumn(name = "SocioPlan_id")
     private SocioPlan socioPlan;
 
 }

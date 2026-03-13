@@ -2,6 +2,7 @@ package com.projectFit.fit_api.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,22 +20,26 @@ public class Clase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank(message = "dia de semana obligatoria")
     private String diaSemana;
-    @NotBlank(message = "fecha y hora de inicio obligatoria")
+
+    @Column(nullable = false)
     private LocalDateTime fechaHoraInicio;
-    @NotBlank(message = "fecha y hora de fin obligatoria")
+
+    @Column(nullable = false)
     private LocalDateTime fechaHoraFin;
-    @NotBlank(message = "cupo maximo por clase obligatorio")
+
+    @NotNull(message = "cupo maximo por clase obligatorio")
     private int cupoMaximo;
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Sede")
+    @JoinColumn(name = "Sede_id")
     private Sede sede;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TipoActividad")
+    @JoinColumn(name = "TipoActividad_id")
     private TipoActividad tipoActividad;
 
 

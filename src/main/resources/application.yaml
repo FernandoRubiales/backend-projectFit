@@ -1,3 +1,39 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
 spring:
   application:
     name: fit-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fit_db
+    username: postgres
+    password:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+
+  flyway:
+    enabled: false
+
+app:
+  qr:
+    size: 300
+    format: PNG
+  notificaciones:
+    dias-aviso-primero: 7
+    dias-aviso-segundo: 1

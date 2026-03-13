@@ -19,16 +19,17 @@ public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "fecha y hora obligatoria")
+
+    @Column(nullable = false)
     private LocalDateTime fechaHoraReserva;
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ClaseReservada")
+    @JoinColumn(name = "ClaseReservada_id")
     private Clase clase;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SocioReservo")
+    @JoinColumn(name = "SocioReservo_id")
     private SocioPlan socioPlan;
 
 }

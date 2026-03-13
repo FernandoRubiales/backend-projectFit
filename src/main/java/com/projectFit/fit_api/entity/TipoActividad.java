@@ -1,9 +1,6 @@
 package com.projectFit.fit_api.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,12 +19,16 @@ public class TipoActividad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank(message = "descripcion obligatoria")
     private String descripcion;
+
     @NotBlank(message = "nombre obligatorio")
     private String nombre;
-    @NotBlank(message = "Requiere reserva obligatoria")
+
+    @Column(nullable = false)
     private Boolean requiereReserva;
-    @NotBlank(message = "Fecha de baja obligatoria")
+
+    @Column(nullable = false)
     private LocalDateTime fechaHoraBajaTP;
 }

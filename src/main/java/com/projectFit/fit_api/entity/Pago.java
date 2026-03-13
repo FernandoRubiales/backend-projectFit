@@ -2,6 +2,7 @@ package com.projectFit.fit_api.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,16 +21,19 @@ public class Pago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "fecha y hora obligatoria")
+
+    @Column(nullable = false)
     private LocalDateTime fechaHoraPago;
+
     @NotBlank(message = "metodo obligatorio")
     private String metodoAbonado;
-    @NotBlank(message = "monto obligatorio")
+
+    @NotNull(message = "monto obligatorio")
     private BigDecimal montoPago;
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SocioPago")
+    @JoinColumn(name = "SocioPago_id")
     private SocioPlan socioPlan;
 
 }
