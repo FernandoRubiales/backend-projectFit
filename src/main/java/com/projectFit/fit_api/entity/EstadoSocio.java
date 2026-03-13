@@ -21,7 +21,7 @@ public class EstadoSocio {
     private Long id;
 
     @NotBlank(message = "nombre obligatorio")
-    private String nombre;
+    private String nombreEstadoSocio;
 
     @Column(nullable = false)
     private LocalDateTime fechaHoraBajaES;
