@@ -24,11 +24,10 @@ public class TipoActividad {
     private String descripcion;
 
     @NotBlank(message = "nombre obligatorio")
-    private String nombre;
+    private String nombreTipoActividad;
 
     @Column(nullable = false)
     private Boolean requiereReserva;
 
-    @Column(nullable = false)
-    private LocalDateTime fechaHoraBajaTP;
+    private LocalDateTime fechaHoraBajaTA;
 }
