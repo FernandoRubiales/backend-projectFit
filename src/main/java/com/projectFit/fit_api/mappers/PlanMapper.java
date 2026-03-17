@@ -12,7 +12,6 @@ public interface PlanMapper {
     //PlanRequestDTO a entidad Plan
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "fechaHoraBajaPlan", ignore = true)
-    @Mapping(target = "tipoActividad", ignore = true)
     @Mapping(target = "clasesIncluidas", ignore = true)
     Plan toEntity(PlanRequestDTO planRequestDTO);
 

@@ -1,15 +1,14 @@
 package com.projectFit.fit_api.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Setter
@@ -23,11 +22,16 @@ public class Sede {
     private Long id;
 
     @NotBlank(message = "direccion obligatoria")
+    @Column(nullable = false)
     private String direccion;
 
     @NotBlank(message = "nombre obligatorio")
-    private String nombre;
+    @Column(nullable = false)
+    private String nombreSede;
 
     @NotNull(message = "telefono obligatorio")
-    private int telefono;
+    @Column(nullable = false)
+    private Integer telefono;
+
+    private LocalDateTime fechaHoraBajaSede;
 }

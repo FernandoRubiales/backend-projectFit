@@ -31,7 +31,6 @@ public class PlanService {
 
         Plan plan = planMapper.toEntity(planRequestDTO);
         plan.setClasesIncluidas(planRequestDTO.getDiasPorSemana() * 4 ); //tomamos 4 semanas del mes
-        plan.setTipoActividad(tipoActividad);
         Plan planGuardado = planRepository.save(plan);
 
         return planMapper.toResponse(planGuardado);
@@ -43,7 +42,7 @@ public class PlanService {
         Plan planExistente = planRepository.findByIdAndFechaHoraBajaPlanIsNull(id).
                 orElseThrow(() -> new RuntimeException("Plan no encontrado"));
 
-        TipoActividad tipoActividad = tipoActividadRespository.findByIdAndFechaHoraBajaTA(planRequestDTO.getTipoActividadId()).
+        TipoActividad tipoActividad = tipoActividadRespository.findByIdAndFechaHoraBajaTAIsNull(planRequestDTO.getTipoActividadId()).
                 orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
 
         planExistente.setNombrePlan(planRequestDTO.getNombrePlan());
