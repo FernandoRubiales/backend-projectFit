@@ -1,8 +1,6 @@
 package com.projectFit.fit_api.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,10 +23,10 @@ public class SocioPlan {
     private int clasesDisponibles;
 
     @Column(nullable = false)
-    private LocalDateTime fechaInicio;
+    private LocalDateTime fechaInicioSocioPlan;
 
     @Column(nullable = false)
-    private LocalDateTime fechaVencimiento;
+    private LocalDateTime fechaVencimientoSocioPlan;
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
