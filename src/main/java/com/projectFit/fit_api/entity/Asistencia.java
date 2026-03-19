@@ -20,23 +20,24 @@ public class Asistencia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private LocalDateTime fechaHoraIngreso;
 
     //RELACIONES
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SedeAsistida_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SedeAsistida_id", nullable = false)
     private Sede sede;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ClaseAsistida_id")
     private Clase clase;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Reserva_id")
     private Reserva reserva;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SocioPlan_id")
+    @JoinColumn(name = "SocioPlan_id", nullable = false)
     private SocioPlan socioPlan;
 
 }

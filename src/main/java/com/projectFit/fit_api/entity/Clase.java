@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Setter
@@ -22,15 +23,17 @@ public class Clase {
     private Long id;
 
     @NotBlank(message = "dia de semana obligatoria")
+    @Column(nullable = false)
     private String diaSemana;
 
     @Column(nullable = false)
-    private LocalDateTime fechaHoraInicio;
+    private LocalTime horaInicio;
 
     @Column(nullable = false)
-    private LocalDateTime fechaHoraFin;
+    private LocalTime horaFin;
 
     @NotNull(message = "cupo maximo por clase obligatorio")
+    @Column(nullable = false)
     private int cupoMaximo;
 
     //RELACIONES

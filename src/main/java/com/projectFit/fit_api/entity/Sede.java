@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Setter
@@ -34,4 +35,8 @@ public class Sede {
     private Integer telefono;
 
     private LocalDateTime fechaHoraBajaSede;
+
+    //RELACIONES
+    @OneToMany(mappedBy = "Sede", fetch = FetchType.LAZY)
+    private List<SedePlan> sedePlanes;
 }

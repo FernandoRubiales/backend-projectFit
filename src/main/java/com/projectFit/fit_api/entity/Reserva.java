@@ -24,11 +24,11 @@ public class Reserva {
     private LocalDateTime fechaHoraReserva;
 
     //RELACIONES
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ClaseReservada_id")
     private Clase clase;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SocioReservo_id")
     private SocioPlan socioPlan;
 

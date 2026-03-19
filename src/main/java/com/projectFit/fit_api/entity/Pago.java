@@ -25,14 +25,17 @@ public class Pago {
     @Column(nullable = false)
     private LocalDateTime fechaHoraPago;
 
-    @NotBlank(message = "metodo obligatorio")
+    @Column(nullable = false)
     private String metodoAbonado;
 
+    private String mpPaymentId;
+
     @NotNull(message = "monto obligatorio")
+    @Column(nullable = false)
     private BigDecimal montoPago;
 
     //RELACIONES
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SocioPago_id")
     private SocioPlan socioPlan;
 

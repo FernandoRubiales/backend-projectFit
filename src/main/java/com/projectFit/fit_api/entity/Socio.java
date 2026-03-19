@@ -32,7 +32,10 @@ public class Socio {
 
     @NotNull(message = "dni obligatorio")
     @Column(unique = true, nullable = false)
-    private BigDecimal dni;
+    private Long dni;
+
+    @Column(unique = true)
+    private String auth0Id;
 
     @NotBlank(message = "email obligatorio")
     @Email(message = "Email inválido")
