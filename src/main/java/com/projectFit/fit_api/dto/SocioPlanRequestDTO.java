@@ -8,9 +8,6 @@ import lombok.Setter;
 @Setter
 public class SocioPlanRequestDTO {
 
-    @NotNull(message = "Socio obligatorio")
-    private Long socioId;
-
     @NotNull(message = "Plan obligatorio")
     private Long planId;
 

@@ -22,10 +22,7 @@ public class SocioPlan {
     @Column(nullable = false)
     private int clasesDisponibles;
 
-    @Column(nullable = false)
     private LocalDateTime fechaInicioSocioPlan;
-
-    @Column(nullable = false)
     private LocalDateTime fechaVencimientoSocioPlan;
 
     //RELACIONES

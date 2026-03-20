@@ -13,6 +13,7 @@ public interface SocioRepository extends JpaRepository<Socio,Long> {
     Optional<Socio> findByEmail(String email);
     Optional<Socio> findByDni(BigDecimal dni);
     Optional<Socio> findByqrCode(String qrCode);
+    Optional<Socio> findByAuth0Id(String auth0Id);
 
     boolean existsByEmail(String email);
     boolean existsByDni(BigDecimal dni);
