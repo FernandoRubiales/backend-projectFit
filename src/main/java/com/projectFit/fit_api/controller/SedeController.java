@@ -50,4 +50,10 @@ public class SedeController {
     public ResponseEntity<List<SedeResponseDTO>> obtenerTodas() {
         return ResponseEntity.ok(sedeService.obtenerTodas());
     }
+
+    //GET DE LAS SEDES QUE PUEDE IR EL SOCIO DEPENDIENDO LOS PLANES ACTIVOS QUE TENGA
+    public ResponseEntity<List<SedeResponseDTO>> obtenerSedesParaPlanActivo(
+            @RequestHeader("X-Auth0-Id") String auth0Id) {
+        return ResponseEntity.ok(sedeService.obtenerSedesPlanesActivos(auth0Id));
+    }
 }

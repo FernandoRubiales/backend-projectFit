@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/socio_plan")
 @RequiredArgsConstructor
@@ -32,5 +34,10 @@ public class SocioPlanController {
         return ResponseEntity.ok(socioPlanService.activarPlan(id));
     }
 
+    //GET DE LOS PLANES ACTIVOS DEL SOCIO
+    @GetMapping("/activos")
+    public ResponseEntity<List<SocioPlanResponseDTO>> obtenerPlanesActivos( @RequestHeader("X-Auth0-Id") String auth0Id){
+        return ResponseEntity.ok(socioPlanService.obtenerPlanesActivos(auth0Id));
+    }
 
 }

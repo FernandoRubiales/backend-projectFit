@@ -22,6 +22,4 @@ public interface SocioPlanRepository extends JpaRepository<SocioPlan, Long> {
     Optional<SocioPlan> planActivoporSocioyPlanId(
             @Param("socioId") Long socioId,
             @Param("planId") Long planId);
-
-    //
 }
