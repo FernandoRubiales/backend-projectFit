@@ -39,5 +39,4 @@ public class SocioPlanController {
     public ResponseEntity<List<SocioPlanResponseDTO>> obtenerPlanesActivos( @RequestHeader("X-Auth0-Id") String auth0Id){
         return ResponseEntity.ok(socioPlanService.obtenerPlanesActivos(auth0Id));
     }
-
 }

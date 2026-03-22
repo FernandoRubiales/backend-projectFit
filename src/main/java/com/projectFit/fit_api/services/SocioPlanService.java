@@ -51,7 +51,7 @@ public class SocioPlanService {
         socioPlan.setEstadoSocioPlan(estadoSocioPlan);
         SocioPlan socioPlanGuardado = socioPlanRepository.save(socioPlan);
 
-        return socioPlanMapper.toResponseDTO(socioPlanGuardado);
+        return socioPlanMapper.toResponse(socioPlanGuardado);
     }
 
     //CUANDO SE ACEPTE EL PAGO, SE ACTIVA EL PLAN DEL SOCIO
@@ -69,8 +69,17 @@ public class SocioPlanService {
         socioPlan.setClasesDisponibles(socioPlan.getPlan().getClasesIncluidas());
         SocioPlan socioPlanGuardado = socioPlanRepository.save(socioPlan);
 
-        return socioPlanMapper.toResponseDTO(socioPlanGuardado);
+        return socioPlanMapper.toResponse(socioPlanGuardado);
+    }
+    //GET DE LOS PLANES ACTIVOS DEL SOCIO
+    public List<SocioPlanResponseDTO> obtenerPlanesActivos(String auth0Id){
+        Socio socio = socioRepository.findByAuth0Id(auth0Id)
+                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+        return socioPlanRepository.planesActivosBySocioId(socio.getId())
+                .stream()
+                .map(socioPlanMapper::toResponse)
+                .toList();
+
     }
 
-    //QUE EL SOCIO PUEDA VER EN QUE SEDE PUEDE REALIZAR LOS PLANES ACTIVOS QUE TIENE
 }

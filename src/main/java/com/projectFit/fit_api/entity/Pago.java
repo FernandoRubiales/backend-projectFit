@@ -36,7 +36,7 @@ public class Pago {
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SocioPago_id")
+    @JoinColumn(name = "socio_plan_id")
     private SocioPlan socioPlan;
 
 }
