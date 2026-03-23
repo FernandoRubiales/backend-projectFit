@@ -1,0 +1,16 @@
+package com.projectFit.fit_api.mappers;
+
+import com.projectFit.fit_api.dto.PagoResponseDTO;
+import com.projectFit.fit_api.entity.Pago;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(componentModel = "spring")
+public interface PagoMapper {
+
+    //Entidad Pago a PagoResponseDTO
+    @Mapping(source = "socioPlan.socio.nombre", target = "nombreSocio")
+    @Mapping(source = "socioPlan.socio.apellido", target = "apellidoSocio")
+    @Mapping(source = "socioPlan.plan.nombrePlan", target = "nombrePlan")
+    PagoResponseDTO toResponse(Pago pago);
+}

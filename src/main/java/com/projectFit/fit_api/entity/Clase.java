@@ -36,13 +36,15 @@ public class Clase {
     @Column(nullable = false)
     private int cupoMaximo;
 
+    private LocalDateTime fechaHoraBajaClase;
+
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Sede_id")
+    @JoinColumn(name = "sede_id")
     private Sede sede;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TipoActividad_id")
+    @JoinColumn(name = "tipoActividad_id")
     private TipoActividad tipoActividad;
 
 
