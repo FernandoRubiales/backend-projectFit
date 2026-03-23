@@ -55,7 +55,7 @@ public class Socio {
     private List<SocioPlan> socioPlan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "EstadoSocio_id")
+    @JoinColumn(name = "estado_socio_id")
     private EstadoSocio estadoSocio;
 
 }

@@ -27,15 +27,15 @@ public class SocioPlan {
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Estado_id")
+    @JoinColumn(name = "estado_id")
     private EstadoSocioPlan estadoSocioPlan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Plan_id")
+    @JoinColumn(name = "plan_id")
     private Plan plan;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Socio_id")
+    @JoinColumn(name = "socio_id")
     private Socio socio;
 
 

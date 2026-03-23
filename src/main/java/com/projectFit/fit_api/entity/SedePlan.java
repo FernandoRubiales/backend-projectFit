@@ -1,9 +1,17 @@
 package com.projectFit.fit_api.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class SedePlan {
 
     @Id
@@ -18,11 +26,11 @@ public class SedePlan {
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Sede_id", nullable = false)
+    @JoinColumn(name = "sede_id", nullable = false)
     private Sede sede;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Plan_id", nullable = false)
+    @JoinColumn(name = "plan_id", nullable = false)
     private Plan plan;
 
 }

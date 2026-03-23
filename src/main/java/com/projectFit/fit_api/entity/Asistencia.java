@@ -25,19 +25,19 @@ public class Asistencia {
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SedeAsistida_id", nullable = false)
+    @JoinColumn(name = "sede_id", nullable = false)
     private Sede sede;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ClaseAsistida_id")
+    @JoinColumn(name = "clase_id")
     private Clase clase;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Reserva_id")
+    @JoinColumn(name = "reserva_id")
     private Reserva reserva;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SocioPlan_id", nullable = false)
+    @JoinColumn(name = "socio_plan_id", nullable = false)
     private SocioPlan socioPlan;
 
 }

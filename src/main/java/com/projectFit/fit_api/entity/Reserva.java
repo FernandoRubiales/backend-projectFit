@@ -25,11 +25,11 @@ public class Reserva {
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ClaseReservada_id")
+    @JoinColumn(name = "clase_id")
     private Clase clase;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SocioReservo_id")
+    @JoinColumn(name = "socio_plan_id")
     private SocioPlan socioPlan;
 
 }

@@ -44,7 +44,7 @@ public class Clase {
     private Sede sede;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tipoActividad_id")
+    @JoinColumn(name = "tipo_actividad_id")
     private TipoActividad tipoActividad;
 
 

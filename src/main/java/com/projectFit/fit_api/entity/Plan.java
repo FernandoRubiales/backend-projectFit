@@ -44,7 +44,7 @@ public class Plan {
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TipoActividad_id")
+    @JoinColumn(name = "tipo_actividad_id")
     private TipoActividad tipoActividad;
 
 
