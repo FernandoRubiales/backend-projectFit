@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +23,9 @@ public class Reserva {
 
     @Column(nullable = false)
     private LocalDateTime fechaHoraReserva;
+
+    @Column(nullable = false)
+    private LocalDate fechaClaseReservada;
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.LAZY)
