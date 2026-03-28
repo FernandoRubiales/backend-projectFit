@@ -12,11 +12,12 @@ import java.util.Optional;
 @Repository
 public interface ReservaRepository extends JpaRepository <Reserva, Long> {
 
-    //Query para verificar si el socio ya reservo esa clase antes
+    //Query para verificar si el socio ya reservo esa clase para hoy
     @Query(value = "SELECT r.* FROM reserva r" +
             "JOIN socio_plan sp ON r.socio_plan_id = sp.id" +
             "WHERE sp.socio_id = :socioId" +
-            "AND r.clase_id = :claseId", nativeQuery = true)
+            "AND r.clase_id = :claseId"+
+            "AND r.fecha_clase_reservada = CURRENT_DATE", nativeQuery = true)
     Optional<Reserva> reservaPorSocioyClaseId(@Param("socioId") Long socioId,
                                               @Param("claseId") Long claseId);
 
@@ -25,10 +26,9 @@ public interface ReservaRepository extends JpaRepository <Reserva, Long> {
             "JOIN socio_plan sp ON r.socio_plan_id = sp.id" +
             "JOIN clase c ON r.clase_id = c.id"+
             "WHERE sp.socio_id = :socioId" +
-            "AND c.tipo_actividad_id = :tipoActividadId"+
-            "AND r.fecha_clase_reservada = :fechaActual", nativeQuery = true)
+            "AND r.fecha_clase_reservada = :CURRENT_DATE"+
+            "AND c.tipo_actividad_id = :tipoActividadId", nativeQuery = true)
     List<Reserva> reservasPorDiayTipoActividad(@Param("socioId") Long socioId,
-                                               @Param("fechaActual") String fechaActual, //revisar
                                                @Param("tipoActividadId") Long tipoActividadId);
 
     //Query para verificar si el socio tiene otra reserva en el mismo horario para el mismo dia
@@ -36,21 +36,24 @@ public interface ReservaRepository extends JpaRepository <Reserva, Long> {
             "JOIN socio_plan sp ON r.socio_plan_id = sp.id" +
             "JOIN clase c ON r.clase_id = c.id" +
             "WHERE sp.socio_id = :socioId" +
+            "AND r.fecha_clase_reservada = :CURRENT_DATE"+
             "AND c.hora_inicio < CAST(:horaFin AS TIME)" +
-            "AND c.hora_fin > CAST(:horaInicio AS TIME)" +
-            "AND r.fecha_clase_reservada = :fechaActual", nativeQuery = true)
+            "AND c.hora_fin > CAST(:horaInicio AS TIME)" , nativeQuery = true)
     List<Reserva> reservasMismoHorario(@Param("socioId") Long socioId,
-                                       @Param("fechaActual") String fechaActual, //revisar
                                        @Param("horaInicio") String horaInicio,
                                        @Param("horaFin") String horaFin);
 
-    //Query para buscar todas las reservas del socio
+    //Query para buscar todas las reservas del socio de hoy en adelante
     @Query(value = "SELECT r.* FROM reserva r" +
             "JOIN socio_plan sp ON r.socio_plan_id = sp.id" +
-            "WHERE sp.socio_id = :socioId", nativeQuery = true)
+            "WHERE sp.socio_id = :socioId"+
+            "AND r.fecha_clase_reservada >= CURRENT_DATE"+
+            "ORDER BY r.fecha_clase_reservada ASC", nativeQuery = true)
     List<Reserva> obtenerTodasLasReservasDelSocio(@Param("socioId") Long socioId);
 
-    //Query para buscar todas las reservas de una clase
-    @Query(value = "SELECT * FROM reserva WHERE clase_id = :claseId", nativeQuery = true)
+    //Query para buscar todas las reservas de una clase para hoy
+    @Query(value = "SELECT * FROM reserva +" +
+            "WHERE clase_id = :claseId"+
+            "AND fecha_clase_reservada = CURRENT_DATE", nativeQuery = true)
     List<Reserva> obtenerTodasLasReservasDeClase(@Param("claseId") Long claseId);
 }

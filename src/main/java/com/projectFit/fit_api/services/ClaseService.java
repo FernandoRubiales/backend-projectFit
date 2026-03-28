@@ -14,8 +14,11 @@ import com.projectFit.fit_api.repository.TipoActividadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -102,13 +105,15 @@ public class ClaseService {
     }
 
     //GET CLASES DISPONIBLES PARA RESERVAR SEGUN EL PLAN DEL SOCIO
-    public List<ClaseResponseDTO> obtenerClasesDisponiblesParaSocio(Long sedeId, String diaSemana, String auth0Id){
+    public List<ClaseResponseDTO> obtenerClasesDisponiblesParaSocio(Long sedeId , String auth0Id){
 
         Socio socio = socioRepository.findByAuth0Id(auth0Id)
                 .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
 
-        return claseRepository.clasesDisponiblesParaSocio(
-                sedeId, diaSemana, socio.getId())
+        String diaActual = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es"));
+        String diaFormateado = diaActual.substring(0,1).toUpperCase() + diaActual.substring(1);
+
+        return claseRepository.clasesDisponiblesParaSocio(sedeId, socio.getId(), diaFormateado)
                 .stream()
                 .map(this::calcularCuposDisponibles)
                 .toList();

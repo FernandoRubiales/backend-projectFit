@@ -57,13 +57,15 @@ public interface ClaseRepository extends JpaRepository <Clase,Long> {
             "JOIN socio_plan sp ON sp.plan_id = p.id " +
             "JOIN estado_socio_plan esp ON sp.estado_id = esp.id " +
             "WHERE c.sede_id = :sedeId " +
-            "AND c.dia_semana = :diaSemana " +
+            "AND  c.dia_semana = :diaActual" +
             "AND c.fecha_hora_baja_clase IS NULL " +
+            "AND ta.requiere_reserva = true"+
             "AND esp.nombre_estado_socio_plan = 'Activo' " +
             "AND sp.socio_id = :socioId " +
             "AND (SELECT c.cupo_maximo - COUNT(r.id) FROM reserva r " +
-            "     WHERE r.clase_id = c.id) > 0", nativeQuery = true)
+            "     WHERE r.clase_id = c.id) > 0"+
+            "     AND r.fecha_clase_reservada = CURRENT_DATE) > 0", nativeQuery = true)
     List<Clase> clasesDisponiblesParaSocio(@Param("sedeId") Long sedeId,
-                                           @Param("diaSemana") String diaSemana,
-                                           @Param("socioId") Long socioId);
+                                           @Param("socioId") Long socioId,
+                                           @Param("diaActual") String diaActual);
 }

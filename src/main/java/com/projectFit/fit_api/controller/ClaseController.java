@@ -66,9 +66,8 @@ public class ClaseController {
     @GetMapping("/disponibles")
     public ResponseEntity<List<ClaseResponseDTO>> obtenerClasesDisponiblesParaSocio(
             @RequestParam Long sedeId,
-            @RequestParam String diaSemana,
             @RequestHeader ("X-Auth0-Id") String auth0Id){
-        return ResponseEntity.ok(claseService.obtenerClasesDisponiblesParaSocio(sedeId, diaSemana, auth0Id));
+        return ResponseEntity.ok(claseService.obtenerClasesDisponiblesParaSocio(sedeId, auth0Id));
 
     }
 }

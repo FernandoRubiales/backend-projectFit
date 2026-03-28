@@ -51,14 +51,14 @@ public class ReservaService {
 
         //Validar que no tenga reserva del mismo tipo de actividad, para el mismo dia
         List<Reserva> reservasMismaActividad = reservaRepository.reservasPorDiayTipoActividad(
-                socio.getId(), LocalDate.now().toString(), clase.getTipoActividad().getId());
+                socio.getId(), clase.getTipoActividad().getId());
 
         if(!reservasMismaActividad.isEmpty()){
             throw new RuntimeException("Ya tenés una reserva de " + clase.getTipoActividad().getNombreTipoActividad() + " ese día");
         }
         //Validar que en el mismo horario no tenga otra reserva ese dia
         List<Reserva> reservasMismoHorario = reservaRepository.reservasMismoHorario(
-                socio.getId(), LocalDate.now().toString(), clase.getHoraFin().toString(), clase.getHoraInicio().toString());
+                socio.getId(), clase.getHoraFin().toString(), clase.getHoraInicio().toString());
 
         if (!reservasMismoHorario.isEmpty()) {
             throw new RuntimeException("Ya tenés una reserva en ese horario");
