@@ -1,6 +1,5 @@
 package com.projectFit.fit_api.config;
 
-import com.projectFit.fit_api.entity.EstadoSocio;
 import com.projectFit.fit_api.entity.EstadoSocioPlan;
 import com.projectFit.fit_api.repository.EstadoSocioPlanRepository;
 import com.projectFit.fit_api.repository.EstadoSocioRepository;
@@ -19,7 +18,6 @@ public class DataInitializer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         inicializarEstadosSocioPlan();
-        inicializarEstadosSocio();
     }
 
     private void inicializarEstadosSocioPlan() {
@@ -32,11 +30,4 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private void inicializarEstadosSocio() {
-        if (estadoSocioRepository.count() == 0) {
-            estadoSocioRepository.save(new EstadoSocio(null, "Activo", null));
-            estadoSocioRepository.save(new EstadoSocio(null, "Inactivo", null));
-            System.out.println("Estados de Socio inicializados");
-        }
-    }
 }
