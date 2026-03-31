@@ -6,6 +6,7 @@ import com.projectFit.fit_api.services.SocioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +52,16 @@ public class SocioController {
     @GetMapping
     public ResponseEntity<List<SocioResponseDTO>> obtenerTodos() {
         return ResponseEntity.ok(socioService.obtenerTodos());
+    }
+
+    //GENERAR IMAGEN QR
+    @GetMapping("/qr")
+    public ResponseEntity<byte[]> obtenerQr(
+            @RequestHeader("X-Auth0-Id") String auth0Id) throws Exception {
+        byte[] qrImage = socioService.generarImagenQr(auth0Id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(qrImage);
     }
 
 }

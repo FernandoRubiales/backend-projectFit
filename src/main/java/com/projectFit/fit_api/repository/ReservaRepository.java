@@ -67,5 +67,5 @@ public interface ReservaRepository extends JpaRepository <Reserva, Long> {
             "AND c.hora_inicio <= CAST(:horaActual AS TIME) " +
             "AND c.hora_fin >= CAST(:horaActual AS TIME) " +
             "LIMIT 1", nativeQuery = true)
-    Optional<Reserva> reservaActivaPorSocioySede(@Param("socioId") Long socioId, @Param("sedeId") Long sedeId);
+    Optional<Reserva> reservaActivaPorSocioySede(@Param("socioId") Long socioId, @Param("sedeId") Long sedeId, @Param("horaActual") String horaActual);
 }

@@ -20,9 +20,9 @@ public class SedePlan {
 
     // Para saber desde cuándo está disponible ese plan en esa sede
     @Column(nullable = false)
-    private LocalDateTime fechaAltaSedePlan;
+    private LocalDateTime fechaHoraAltaSedePlan;
 
-    private LocalDateTime fechaBajaSedePlan;
+    private LocalDateTime fechaHoraBajaSedePlan;
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.LAZY)

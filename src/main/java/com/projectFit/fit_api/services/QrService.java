@@ -12,6 +12,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class QrService {
@@ -29,7 +32,7 @@ public class QrService {
                 .orElseThrow(()-> new RuntimeException("Qr invalido, socio no encontrado"));
 
         //Buscar si tiene reserva para hoy en esa sede
-        Reserva reserva = reservaRepository.reservaActivaPorSocioySede(socio.getId(), escanerQrRequestDTO.getSedeId()).orElse(null);
+        Reserva reserva = reservaRepository.reservaActivaPorSocioySede(socio.getId(), escanerQrRequestDTO.getSedeId(), LocalTime.now().toString()).orElse(null);
 
         if(reserva != null){
             //VALIDACIONES PARA CLASE CON RESERVA
@@ -45,9 +48,23 @@ public class QrService {
             escanerQrResponseDTO.setNombreTipoActividad(reserva.getClase().getTipoActividad().getNombreTipoActividad());
             escanerQrResponseDTO.setMensaje("¡Bienvenido " + socio.getNombre());
 
-            //VALIDACIONES PARA CLASE SIN RESERVA
-
+            return escanerQrResponseDTO;
         }
+        //VALIDACIONES PARA CLASES SIN RESERVA
+        SocioPlan socioPlanSinReserva = socioPlanRepository.planActivoporSocioySedeId(socio.getId(), escanerQrRequestDTO.getSedeId())
+                .orElseThrow(()-> new RuntimeException("No tenes plan activo para esa sede"));
 
+        //Descontamos la cantidad de clases disponibles que le quedan
+        socioPlanSinReserva.setClasesDisponibles(socioPlanSinReserva.getClasesDisponibles() - 1);
+        socioPlanRepository.save(socioPlanSinReserva);
+
+        EscanerQrResponseDTO escanerQrResponseDTO = new EscanerQrResponseDTO();
+        escanerQrResponseDTO.setNombreSocio(socio.getNombre());
+        escanerQrResponseDTO.setApellidoSocio(socio.getApellido());
+        escanerQrResponseDTO.setNombreTipoActividad(socioPlanSinReserva.getPlan().getTipoActividad().getNombreTipoActividad());
+        escanerQrResponseDTO.setClasesRestante(socioPlanSinReserva.getClasesDisponibles());
+        escanerQrResponseDTO.setMensaje("¡Bienvenido " + socio.getNombre());
+
+        return escanerQrResponseDTO;
     }
 }

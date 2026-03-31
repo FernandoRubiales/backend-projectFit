@@ -1,5 +1,9 @@
 package com.projectFit.fit_api.services;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.projectFit.fit_api.dto.SocioRequestDTO;
 import com.projectFit.fit_api.dto.SocioResponseDTO;
 import com.projectFit.fit_api.entity.Socio;
@@ -8,6 +12,7 @@ import com.projectFit.fit_api.repository.SocioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -66,5 +71,20 @@ public class SocioService {
                 .stream()
                 .map(socioMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    //GENERAR IMAGEN QR
+    public byte[] generarImagenQr(String auth0Id) throws Exception {
+        Socio socio = socioRepository.findByAuth0Id(auth0Id)
+                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(
+                socio.getQrCode(),
+                BarcodeFormat.QR_CODE, 300, 300);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
+        return outputStream.toByteArray();
     }
 }

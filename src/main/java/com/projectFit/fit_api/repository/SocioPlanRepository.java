@@ -48,4 +48,21 @@ public interface SocioPlanRepository extends JpaRepository<SocioPlan, Long> {
             "AND esp.nombre_estado_socio_plan = 'Activo'", nativeQuery = true)
     Optional<SocioPlan> planActivoporSocioyActividadId(@Param("socioId") Long socioId,
                                                        @Param("tipoActividadId") Long tipoActividadId);
+
+    //Query para buscar plan activo del socio en esa sede, que no requiera reserva de clase
+    @Query(value = "SELECT sp.* FROM socio_plan sp"+
+            "JOIN estado_socio_plan esp ON sp.estado_id = esp.id"+
+            "JOIN sede_plan sedepl ON sp.plan_id = sedepl.plan_id"+
+            "JOIN plan p ON sp.plan_id = p.id"+
+            "JOIN tipo_actividad ta ON p.tipo_actividad_id = ta.id "+
+            "WHERE sp.socio_id = :socioId"+
+            "AND sedepl.sede_id = :sedeId"+
+            "AND esp.nombre_estado_socio_plan = 'Activo' "+
+            "AND sedepl.fecha_hora_baja_sede_plan IS NULL"+
+            "AND ta.requiere_reserva = false "+
+            "AND sp.clases_disponibles > 0"+
+            "LIMIT 1", nativeQuery = true)
+    Optional<SocioPlan> planActivoporSocioySedeId(@Param("socioId") Long socioId,
+                                                  @Param("sedeId") Long sedeId);
+
 }
