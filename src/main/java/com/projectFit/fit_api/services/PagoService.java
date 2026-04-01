@@ -7,6 +7,7 @@ import com.projectFit.fit_api.entity.SocioPlan;
 import com.projectFit.fit_api.mappers.PagoMapper;
 import com.projectFit.fit_api.repository.PagoRepository;
 import com.projectFit.fit_api.repository.SocioPlanRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PagoService {
 
     private final PagoRepository pagoRepository;

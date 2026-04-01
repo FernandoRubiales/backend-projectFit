@@ -11,6 +11,7 @@ import com.projectFit.fit_api.repository.ClaseRepository;
 import com.projectFit.fit_api.repository.SedeRepository;
 import com.projectFit.fit_api.repository.SocioRepository;
 import com.projectFit.fit_api.repository.TipoActividadRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ClaseService {
 
     private final ClaseRepository claseRepository;
@@ -35,7 +37,7 @@ public class ClaseService {
         Sede sede = sedeRepository.findByIdAndFechaHoraBajaIsNull(claseRequestDTO.getSedeId())
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
 
-        TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaTAIsNull(claseRequestDTO.getTipoActividadId())
+        TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(claseRequestDTO.getTipoActividadId())
                 .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
 
         Clase clase = claseMapper.toEntity(claseRequestDTO);
@@ -52,7 +54,7 @@ public class ClaseService {
         Sede sede = sedeRepository.findByIdAndFechaHoraBajaIsNull(claseRequestDTO.getSedeId())
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
 
-        TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaTAIsNull(claseRequestDTO.getTipoActividadId())
+        TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(claseRequestDTO.getTipoActividadId())
                 .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
 
         claseExistente.setDiaSemana(claseRequestDTO.getDiaSemana());
@@ -91,14 +93,6 @@ public class ClaseService {
     //GET CLASES POR TIPO ACTIVIDAD
     public List<ClaseResponseDTO> obtenerPorTipoActividad(Long tipoActividadId) {
         return claseRepository.clasesDisponiblesPorTipoActividad(tipoActividadId)
-                .stream()
-                .map(this::calcularCuposDisponibles)
-                .toList();
-    }
-
-    //GET CLASES POR SEDE Y DIA DE SEMANA
-    public List<ClaseResponseDTO> obtenerPorSedeYDia(Long sedeId, String diaSemana) {
-        return claseRepository.clasesDisponiblesPorSedeYdia(sedeId, diaSemana)
                 .stream()
                 .map(this::calcularCuposDisponibles)
                 .toList();

@@ -54,13 +54,6 @@ public class ClaseController {
             @PathVariable Long tipoActividadId) {
         return ResponseEntity.ok(claseService.obtenerPorTipoActividad(tipoActividadId));
     }
-    //GET POR SEDE Y DIA DE SEMANA
-    @GetMapping("/sede/{sedeId}/dia/{diaSemana}")
-    public ResponseEntity<List<ClaseResponseDTO>> obtenerPorSedeYDia(
-            @PathVariable Long sedeId,
-            @PathVariable String diaSemana) {
-        return ResponseEntity.ok(claseService.obtenerPorSedeYDia(sedeId, diaSemana));
-    }
 
     //GET CLASES DISPONIBLES PARA RESERVAR SEGUN EL PLAN DEL SOCIO
     @GetMapping("/disponibles")

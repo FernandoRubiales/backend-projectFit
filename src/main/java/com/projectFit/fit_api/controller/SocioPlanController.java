@@ -39,4 +39,12 @@ public class SocioPlanController {
     public ResponseEntity<List<SocioPlanResponseDTO>> obtenerPlanesActivos( @RequestHeader("X-Auth0-Id") String auth0Id){
         return ResponseEntity.ok(socioPlanService.obtenerPlanesActivos(auth0Id));
     }
+
+    //GET DE PLANES PENDIENTES DEL SOCIO POR DNI
+    @GetMapping("/pendientes/dni/{dni}")
+    public ResponseEntity<List<SocioPlanResponseDTO>> obtenerPlanesPendientesPorDni(
+            @PathVariable Long dni) {
+        return ResponseEntity.ok(
+                socioPlanService.obtenerPlanesPendientesPorDni(dni));
+    }
 }

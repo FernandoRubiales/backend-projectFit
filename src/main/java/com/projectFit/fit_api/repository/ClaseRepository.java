@@ -31,12 +31,6 @@ public interface ClaseRepository extends JpaRepository <Clase,Long> {
     "AND fecha_hora_baja_clase IS NULL", nativeQuery = true)
     List<Clase> clasesDisponiblesPorTipoActividad(@Param("tipoActividadId") Long tipoActividadId);
 
-    //CLASE DISPONIBLES POR SEDE Y DIA DE SEMANA
-    @Query(value = "SELECT * FROM clase WHERE sede_id = :sedeId " +
-            "AND dia_semana = :diaSemana " +
-            "AND fecha_hora_baja_clase IS NULL",
-            nativeQuery = true)
-    List<Clase> clasesDisponiblesPorSedeYdia(@Param("sedeId") Long sedeId, @Param("diaSemana") String diaSemana);
 
     //CLASE ACTIVA POR SEDE Y RANGO HORARIO ACTUAL USADA PARA EL ESCANER Y VER QUE CLASE ESTA EN CURSO
     @Query(value = "SELECT * FROM clase WHERE sede_id = :sedeId " +

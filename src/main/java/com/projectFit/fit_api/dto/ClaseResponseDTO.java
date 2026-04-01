@@ -15,5 +15,4 @@ public class ClaseResponseDTO {
     private int cuposDisponibles;
     private String nombreSede;
     private String nombreTipoActividad;
-    private Boolean requiereReserva;
 }

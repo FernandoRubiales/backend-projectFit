@@ -11,9 +11,6 @@ import java.math.BigDecimal;
 @Setter
 public class PagoRequestDTO {
 
-    @NotBlank(message = "Método de pago obligatorio")
-    private String metodoAbonado;
-
     @NotNull(message = "Monto obligatorio")
     private BigDecimal montoPago;
 

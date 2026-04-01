@@ -81,7 +81,15 @@ public class SocioPlanService {
                 .stream()
                 .map(socioPlanMapper::toResponse)
                 .toList();
-
     }
 
+    //GET DE PLANES PENDIENTES DEL SOCIO POR DNI
+    public List<SocioPlanResponseDTO> obtenerPlanesPendientesPorDni(Long dni) {
+        Socio socio = socioRepository.findByDni(dni)
+                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+        return socioPlanRepository.planesPendientesPorSocioId(socio.getId())
+                .stream()
+                .map(socioPlanMapper::toResponse)
+                .toList();
+    }
 }

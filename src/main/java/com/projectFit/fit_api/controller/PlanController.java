@@ -57,5 +57,4 @@ public class PlanController {
     public ResponseEntity<List<PlanResponseDTO>> obtenerPorActividad(@PathVariable Long tipoActividadId){
         return ResponseEntity.ok(planService.obtenerPorActividad(tipoActividadId));
     }
-
 }

@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface SocioPlanRepository extends JpaRepository<SocioPlan, Long> {
 
-
     //Query para verificar si el socio ya tiene ese plan activo
     @Query(value = "SELECT sp.* FROM socio_plan sp" +
             "JOIN estado_socio_plan esp ON sp.estado_id = esp.id"+
@@ -31,6 +30,13 @@ public interface SocioPlanRepository extends JpaRepository<SocioPlan, Long> {
             "AND esp.nombre_estado_socio_plan = 'Activo' ",
             nativeQuery = true)
     List<SocioPlan> planesActivosBySocioId(@Param("socioId") Long socioId);
+
+    //Query para obtener los planes pendientes del socio
+    @Query(value = "SELECT sp.* FROM socio_plan sp "+
+            "JOIN estado_socio_plan esp ON sp.estado_id = esp.id"+
+            "WHERE sp.socio_id = :socioId"+
+            "AND esp.nombre_estado_socio_plan = 'Pendiente'", nativeQuery = true)
+    List<SocioPlan> planesPendientesPorSocioId(@Param("socioId") Long socioId);
 
     // Query para planes proximos a vencer para notificaciones
     @Query(value = "SELECT sp.* FROM socio_plan sp " +

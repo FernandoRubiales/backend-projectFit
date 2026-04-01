@@ -24,5 +24,4 @@ public class EstadoSocioPlan {
     @Column(nullable = false)
     private String nombreEstadoSocioPlan;
 
-    private LocalDateTime fechaHoraBajaESP;
 }
