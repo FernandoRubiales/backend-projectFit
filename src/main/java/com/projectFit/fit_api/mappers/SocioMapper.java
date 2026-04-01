@@ -13,11 +13,9 @@ public interface SocioMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "qrCode", ignore = true)
     @Mapping(target = "socioPlan", ignore = true)
-    @Mapping(target = "estadoSocio", ignore = true)
     Socio toEntity(SocioRequestDTO socioRequestDTO);
 
     //Entidad Socio  a SocioResponseDTO
-    @Mapping(source = "estadoSocio.nombreEstadoSocio", target = "estadoSocio")
     SocioResponseDTO toResponse(Socio socio);
 
 }

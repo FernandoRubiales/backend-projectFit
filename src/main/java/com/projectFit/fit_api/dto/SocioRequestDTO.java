@@ -20,14 +20,14 @@ public class SocioRequestDTO {
     private String apellido;
 
     @NotNull(message = "DNI obligatorio")
-    private BigDecimal dni;
+    private Long dni;
 
     @NotBlank(message = "Email obligatorio")
     @Email(message = "Email inválido")
     private String email;
 
     @NotBlank(message = "Teléfono obligatorio")
-    private String telefono;
+    private Integer telefono;
 
     private LocalDate fechaNacimiento;
 

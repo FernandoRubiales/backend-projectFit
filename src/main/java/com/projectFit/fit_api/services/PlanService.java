@@ -7,6 +7,7 @@ import com.projectFit.fit_api.entity.TipoActividad;
 import com.projectFit.fit_api.mappers.PlanMapper;
 import com.projectFit.fit_api.repository.PlanRepository;
 import com.projectFit.fit_api.repository.TipoActividadRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PlanService {
 
     private final PlanRepository planRepository;
@@ -42,7 +44,7 @@ public class PlanService {
         Plan planExistente = planRepository.findByIdAndFechaHoraBajaPlanIsNull(id).
                 orElseThrow(() -> new RuntimeException("Plan no encontrado"));
 
-        TipoActividad tipoActividad = tipoActividadRespository.findByIdAndFechaHoraBajaTAIsNull(planRequestDTO.getTipoActividadId()).
+        TipoActividad tipoActividad = tipoActividadRespository.findByIdAndFechaHoraBajaActividadIsNull(planRequestDTO.getTipoActividadId()).
                 orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
 
         planExistente.setNombrePlan(planRequestDTO.getNombrePlan());

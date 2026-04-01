@@ -5,6 +5,7 @@ import com.projectFit.fit_api.dto.TipoActividadResponseDTO;
 import com.projectFit.fit_api.entity.TipoActividad;
 import com.projectFit.fit_api.mappers.TipoActividadMapper;
 import com.projectFit.fit_api.repository.TipoActividadRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TipoActividadService {
 
     private final TipoActividadRepository tipoActividadRepository;
@@ -31,7 +33,7 @@ public class TipoActividadService {
 
     //UPDATE TipoActividad
     public TipoActividadResponseDTO actualizarActividad(Long id, TipoActividadRequestDTO tipoActividadRequestDTO){
-        TipoActividad tipoActividadExistente = tipoActividadRepository.findByIdAndFechaHoraBajaTAIsNull(id)
+        TipoActividad tipoActividadExistente = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(id)
                 .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
 
         tipoActividadExistente.setNombreTipoActividad(tipoActividadRequestDTO.getNombreTipoActividad());
@@ -44,16 +46,16 @@ public class TipoActividadService {
 
     //DELETE TipoActividad
     public void darDeBajaActividad(Long id){
-        TipoActividad tipoActividadExistente = tipoActividadRepository.findByIdAndFechaHoraBajaTAIsNull(id)
+        TipoActividad tipoActividadExistente = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(id)
                 .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
 
-        tipoActividadExistente.setFechaHoraBajaTA(LocalDateTime.now());
+        tipoActividadExistente.setFechaHoraBajaActivdad(LocalDateTime.now());
         tipoActividadRepository.save(tipoActividadExistente);
     }
 
     //GET TipoActividad por ID
     public TipoActividadResponseDTO obtenerPorId(Long id){
-        TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaTAIsNull(id)
+        TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(id)
                 .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
 
         return tipoActividadMapper.toResponse(tipoActividad);
@@ -61,7 +63,7 @@ public class TipoActividadService {
 
     //GET ALL TipoActividad
     public List<TipoActividadResponseDTO> obtenerTodas(){
-        return tipoActividadRepository.findByFechaHoraBajaTAIsNull()
+        return tipoActividadRepository.findByFechaHoraBajaActividadIsNull()
                 .stream()
                 .map(tipoActividadMapper::toResponse)
                 .toList();

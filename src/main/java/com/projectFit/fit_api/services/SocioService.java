@@ -9,6 +9,7 @@ import com.projectFit.fit_api.dto.SocioResponseDTO;
 import com.projectFit.fit_api.entity.Socio;
 import com.projectFit.fit_api.mappers.SocioMapper;
 import com.projectFit.fit_api.repository.SocioRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SocioService {
 
     private final SocioRepository socioRepository;
@@ -47,6 +49,7 @@ public class SocioService {
         socioExistente.setApellido(socioRequestDTO.getApellido());
         socioExistente.setTelefono(socioRequestDTO.getTelefono());
         socioExistente.setFechaNacimiento(socioRequestDTO.getFechaNacimiento());
+        socioExistente.setEmail(socioRequestDTO.getEmail());
         Socio socioGuardado = socioRepository.save(socioExistente);
         return socioMapper.toResponse(socioGuardado);
     }

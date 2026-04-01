@@ -18,7 +18,6 @@ public class SedePlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Para saber desde cuándo está disponible ese plan en esa sede
     @Column(nullable = false)
     private LocalDateTime fechaHoraAltaSedePlan;
 

@@ -38,5 +38,4 @@ public class SocioPlan {
     @JoinColumn(name = "socio_id")
     private Socio socio;
 
-
 }

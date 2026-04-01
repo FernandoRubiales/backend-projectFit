@@ -11,8 +11,8 @@ import java.util.Optional;
 @Repository
 public interface TipoActividadRepository extends JpaRepository<TipoActividad,Long> {
 
-    List<TipoActividad> findByFechaHoraBajaTAIsNull();
-    Optional<TipoActividad> findByIdAndFechaHoraBajaTAIsNull(Long id);
+    List<TipoActividad> findByFechaHoraBajaActividadIsNull();
+    Optional<TipoActividad> findByIdAndFechaHoraBajaActividadIsNull(Long id);
     boolean existsByNombreTipoActividad(String nombreTipoActividad);
 
 

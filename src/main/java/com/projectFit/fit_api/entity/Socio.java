@@ -25,9 +25,11 @@ public class Socio {
     private Long id;
 
     @NotBlank(message = "nombre obligatorio")
+    @Column(nullable = false)
     private String nombre;
 
     @NotBlank(message = "apellido obligatorio")
+    @Column(nullable = false)
     private String apellido;
 
     @NotNull(message = "dni obligatorio")
@@ -39,10 +41,12 @@ public class Socio {
 
     @NotBlank(message = "email obligatorio")
     @Email(message = "Email inválido")
+    @Column(nullable = false)
     private String email;
 
     @NotBlank(message = "telefono obligatorio")
-    private String telefono;
+    @Column(nullable = false)
+    private Integer telefono;
 
     @Column(unique = true)
     private String qrCode;
@@ -53,9 +57,4 @@ public class Socio {
     //RELACIONES
     @OneToMany(mappedBy = "socio", fetch = FetchType.LAZY)
     private List<SocioPlan> socioPlan;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "estado_socio_id")
-    private EstadoSocio estadoSocio;
-
 }

@@ -1,5 +1,6 @@
 package com.projectFit.fit_api.controller;
 
+import com.projectFit.fit_api.dto.SedeDetalleResponseDTO;
 import com.projectFit.fit_api.dto.SedeRequestDTO;
 import com.projectFit.fit_api.dto.SedeResponseDTO;
 import com.projectFit.fit_api.services.SedeService;
@@ -41,8 +42,8 @@ public class SedeController {
 
     //GET SEDE por ID
     @GetMapping("/{id}")
-    public ResponseEntity<SedeResponseDTO> obtenerPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(sedeService.obtenerPorId(id));
+    public ResponseEntity<SedeDetalleResponseDTO> obtenerPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(sedeService.obtenerDetalleSede(id));
     }
 
     //GET ALL SEDE

@@ -11,7 +11,7 @@ public interface TipoActividadMapper {
 
     //TipoActividadRequestDTO a entidad TipoActividad
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "fechaHoraBajaTA", ignore = true)
+    @Mapping(target = "fechaHoraBajaActividad", ignore = true)
     TipoActividad toEntity(TipoActividadRequestDTO tipoActividadRequestDTO);
 
     //Entidad TipoActividad a TipoActividadResponseDTO

@@ -1,5 +1,6 @@
 package com.projectFit.fit_api.services;
 
+import com.projectFit.fit_api.dto.SedeDetalleResponseDTO;
 import com.projectFit.fit_api.dto.SedeRequestDTO;
 import com.projectFit.fit_api.dto.SedeResponseDTO;
 import com.projectFit.fit_api.entity.Sede;
@@ -7,6 +8,7 @@ import com.projectFit.fit_api.entity.Socio;
 import com.projectFit.fit_api.mappers.SedeMapper;
 import com.projectFit.fit_api.repository.SedeRepository;
 import com.projectFit.fit_api.repository.SocioRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SedeService {
 
     private final SedeRepository sedeRepository;
@@ -51,19 +54,19 @@ public class SedeService {
         sedeRepository.save(sedeExistente);
     }
 
-    //GET SEDE por ID
-    public SedeResponseDTO obtenerPorId(Long id) {
-        Sede sedeExistente = sedeRepository.findByIdAndFechaHoraBajaIsNull(id)
-                .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
-        return sedeMapper.toResponse(sedeExistente);
-    }
-
     //GET ALL SEDE
     public List<SedeResponseDTO> obtenerTodas() {
         return sedeRepository.findByFechaHoraBajaSedeIsNull()
                 .stream()
                 .map(sedeMapper::toResponse)
                 .toList();
+    }
+
+    //GET SEDE CON DETALLE por ID
+    public SedeDetalleResponseDTO obtenerDetalleSede(Long id) {
+        Sede sede = sedeRepository.findByIdAndFechaHoraBajaIsNull(id)
+                .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
+        return sedeMapper.toDetalleResponse(sede);
     }
 
     //GET DE LAS SEDES QUE PUEDE IR EL SOCIO DEPENDIENDO LOS PLANES ACTIVOS QUE TENGA
