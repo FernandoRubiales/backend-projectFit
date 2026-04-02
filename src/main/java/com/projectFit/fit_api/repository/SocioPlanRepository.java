@@ -38,13 +38,6 @@ public interface SocioPlanRepository extends JpaRepository<SocioPlan, Long> {
             "AND esp.nombre_estado_socio_plan = 'Pendiente'", nativeQuery = true)
     List<SocioPlan> planesPendientesPorSocioId(@Param("socioId") Long socioId);
 
-    // Query para planes proximos a vencer para notificaciones
-    @Query(value = "SELECT sp.* FROM socio_plan sp " +
-            "JOIN estado_socio_plan esp ON sp.estado_id = esp.id " +
-            "WHERE esp.nombre_estado_socio_plan = 'ACTIVA' " +
-            "AND sp.fecha_vencimiento_socio_plan <= NOW() + (:dias * INTERVAL '1 day')",nativeQuery = true)
-    List<SocioPlan> proximosAvencer(@Param("dias") int dias);
-
     //Query para verificar si el socio tiene una plan activo para ese tipo de actividad
     @Query(value = "SELECT sp.* FROM socio_plan sp"+
             "JOIN estado_socio_plan esp ON sp.estado_id = esp.id" +

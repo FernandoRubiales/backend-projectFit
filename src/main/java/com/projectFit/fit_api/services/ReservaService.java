@@ -11,6 +11,7 @@ import com.projectFit.fit_api.repository.ClaseRepository;
 import com.projectFit.fit_api.repository.ReservaRepository;
 import com.projectFit.fit_api.repository.SocioPlanRepository;
 import com.projectFit.fit_api.repository.SocioRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReservaService {
     private final ReservaRepository reservaRepository;
     private final SocioRepository socioRepository;
