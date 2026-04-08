@@ -36,7 +36,7 @@ public class SedeService {
 
     //UPDATE SEDE
     public SedeResponseDTO actualizarSede(Long id, SedeRequestDTO sedeRequestDTO){
-        Sede sedeExistente = sedeRepository.findByIdAndFechaHoraBajaIsNull(id)
+        Sede sedeExistente = sedeRepository.findByIdAndFechaHoraBajaSedeIsNull(id)
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
 
         sedeExistente.setNombreSede(sedeRequestDTO.getNombreSede());
@@ -48,7 +48,7 @@ public class SedeService {
 
     //DELETE SEDE
     public void darDeBajaSede(Long id){
-        Sede sedeExistente = sedeRepository.findByIdAndFechaHoraBajaIsNull(id)
+        Sede sedeExistente = sedeRepository.findByIdAndFechaHoraBajaSedeIsNull(id)
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
         sedeExistente.setFechaHoraBajaSede(LocalDateTime.now());
         sedeRepository.save(sedeExistente);
@@ -64,7 +64,7 @@ public class SedeService {
 
     //GET SEDE CON DETALLE por ID
     public SedeDetalleResponseDTO obtenerDetalleSede(Long id) {
-        Sede sede = sedeRepository.findByIdAndFechaHoraBajaIsNull(id)
+        Sede sede = sedeRepository.findByIdAndFechaHoraBajaSedeIsNull(id)
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
         return sedeMapper.toDetalleResponse(sede);
     }

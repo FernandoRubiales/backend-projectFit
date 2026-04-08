@@ -29,7 +29,7 @@ public class SedePlanService {
 
     //ASOCIAR PLAN A UNA SEDE
     public SedePlanResponseDTO agregar(SedePlanRequestDTO sedePlanRequestDTO) {
-        Sede sede = sedeRepository.findByIdAndFechaHoraBajaIsNull(sedePlanRequestDTO.getSedeId())
+        Sede sede = sedeRepository.findByIdAndFechaHoraBajaSedeIsNull(sedePlanRequestDTO.getSedeId())
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
 
         Plan plan = planRepository.findByIdAndFechaHoraBajaPlanIsNull(sedePlanRequestDTO.getPlanId())

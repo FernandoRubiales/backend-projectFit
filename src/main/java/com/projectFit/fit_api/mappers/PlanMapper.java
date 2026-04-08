@@ -16,7 +16,7 @@ public interface PlanMapper {
     Plan toEntity(PlanRequestDTO planRequestDTO);
 
     //Entidad Plan a PlanResponseDTO
-    @Mapping(source = "tipoActividad.nombreTipoActividad", target = "tipoActviidad")
+    @Mapping(source = "tipoActividad.nombreTipoActividad", target = "tipoActividad")
     PlanResponseDTO toResponse(Plan plan);
 
 }

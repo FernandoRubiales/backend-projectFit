@@ -49,7 +49,7 @@ public class TipoActividadService {
         TipoActividad tipoActividadExistente = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(id)
                 .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
 
-        tipoActividadExistente.setFechaHoraBajaActivdad(LocalDateTime.now());
+        tipoActividadExistente.setFechaHoraBajaActividad(LocalDateTime.now());
         tipoActividadRepository.save(tipoActividadExistente);
     }
 

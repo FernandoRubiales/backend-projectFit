@@ -34,7 +34,7 @@ public class ClaseService {
 
     //CREATE CLASE
     public ClaseResponseDTO crearClase(ClaseRequestDTO claseRequestDTO){
-        Sede sede = sedeRepository.findByIdAndFechaHoraBajaIsNull(claseRequestDTO.getSedeId())
+        Sede sede = sedeRepository.findByIdAndFechaHoraBajaSedeIsNull(claseRequestDTO.getSedeId())
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
 
         TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(claseRequestDTO.getTipoActividadId())
@@ -51,7 +51,7 @@ public class ClaseService {
         Clase claseExistente = claseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Clase no encontrada"));
 
-        Sede sede = sedeRepository.findByIdAndFechaHoraBajaIsNull(claseRequestDTO.getSedeId())
+        Sede sede = sedeRepository.findByIdAndFechaHoraBajaSedeIsNull(claseRequestDTO.getSedeId())
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
 
         TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(claseRequestDTO.getTipoActividadId())

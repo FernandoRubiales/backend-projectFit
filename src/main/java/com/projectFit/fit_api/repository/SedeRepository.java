@@ -14,7 +14,7 @@ public interface SedeRepository extends JpaRepository<Sede, Long> {
 
     List<Sede> findByFechaHoraBajaSedeIsNull();
 
-    Optional<Sede> findByIdAndFechaHoraBajaIsNull(Long id);
+    Optional<Sede> findByIdAndFechaHoraBajaSedeIsNull(Long id);
 
     boolean existsByDireccion(String direccion);
 

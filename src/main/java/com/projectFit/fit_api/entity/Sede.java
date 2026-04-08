@@ -37,6 +37,6 @@ public class Sede {
     private LocalDateTime fechaHoraBajaSede;
 
     //RELACIONES
-    @OneToMany(mappedBy = "Sede", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sede", fetch = FetchType.LAZY)
     private List<SedePlan> sedePlanes;
 }

@@ -33,5 +33,5 @@ public class TipoActividad {
     @Column(nullable = false)
     private Boolean requiereReserva;
 
-    private LocalDateTime fechaHoraBajaActivdad;
+    private LocalDateTime fechaHoraBajaActividad;
 }
