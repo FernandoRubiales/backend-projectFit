@@ -57,15 +57,14 @@ public interface ReservaRepository extends JpaRepository <Reserva, Long> {
             "AND fecha_clase_reservada = CURRENT_DATE", nativeQuery = true)
     List<Reserva> obtenerTodasLasReservasDeClase(@Param("claseId") Long claseId);
 
-    //Query para buscar reserva activa del socio para HOY en una sede activa
+    //Query para buscar reserva activa del socio para HOY
     @Query(value = "SELECT r.* FROM reserva r"+
             "JOIN socio_plan sp ON r.socio_plan_id = sp.id " +
             "JOIN clase c ON r.clase_id = c.id " +
             "WHERE sp.socio_id = :socioId " +
-            "AND c.sede_id = :sedeId " +
             "AND r.fecha_clase_reservada = CURRENT_DATE " +
             "AND c.hora_inicio <= CAST(:horaActual AS TIME) " +
             "AND c.hora_fin >= CAST(:horaActual AS TIME) " +
             "LIMIT 1", nativeQuery = true)
-    Optional<Reserva> reservaActivaPorSocioySede(@Param("socioId") Long socioId, @Param("sedeId") Long sedeId, @Param("horaActual") String horaActual);
+    Optional<Reserva> reservaActivaPorSocio(@Param("socioId") Long socioId, @Param("horaActual") String horaActual);
 }

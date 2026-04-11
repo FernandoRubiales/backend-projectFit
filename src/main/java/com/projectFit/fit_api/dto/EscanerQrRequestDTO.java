@@ -12,6 +12,4 @@ public class EscanerQrRequestDTO {
     @NotBlank(message = "Qr obligatorio")
     private String qrCode;
 
-    @NotNull(message = "Sede obligatoria")
-    private Long sedeId;
 }

@@ -40,10 +40,6 @@ public class Clase {
 
     //RELACIONES
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sede_id")
-    private Sede sede;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tipo_actividad_id")
     private TipoActividad tipoActividad;
 

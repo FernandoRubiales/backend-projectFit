@@ -32,7 +32,7 @@ public class QrService {
                 .orElseThrow(()-> new RuntimeException("Qr invalido, socio no encontrado"));
 
         //Buscar si tiene reserva para hoy en esa sede
-        Reserva reserva = reservaRepository.reservaActivaPorSocioySede(socio.getId(), escanerQrRequestDTO.getSedeId(), LocalTime.now().toString()).orElse(null);
+        Reserva reserva = reservaRepository.reservaActivaPorSocio(socio.getId(), LocalTime.now().toString()).orElse(null);
 
         if(reserva != null){
             //VALIDACIONES PARA CLASE CON RESERVA
@@ -51,8 +51,8 @@ public class QrService {
             return escanerQrResponseDTO;
         }
         //VALIDACIONES PARA CLASES SIN RESERVA
-        SocioPlan socioPlanSinReserva = socioPlanRepository.planActivoporSocioySedeId(socio.getId(), escanerQrRequestDTO.getSedeId())
-                .orElseThrow(()-> new RuntimeException("No tenes plan activo para esa sede"));
+        SocioPlan socioPlanSinReserva = socioPlanRepository.planActivoporSocio(socio.getId())
+                .orElseThrow(()-> new RuntimeException("No tenes plan activo"));
 
         //Descontamos la cantidad de clases disponibles que le quedan
         socioPlanSinReserva.setClasesDisponibles(socioPlanSinReserva.getClasesDisponibles() - 1);

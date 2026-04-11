@@ -13,6 +13,5 @@ public class ClaseResponseDTO {
     private LocalTime horaFin;
     private int cupoMaximo;
     private int cuposDisponibles;
-    private String nombreSede;
     private String nombreTipoActividad;
 }

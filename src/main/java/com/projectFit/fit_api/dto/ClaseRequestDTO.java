@@ -23,9 +23,6 @@ public class ClaseRequestDTO {
     @NotNull(message = "Cupo máximo obligatorio")
     private int cupoMaximo;
 
-    @NotNull(message = "Sede obligatoria")
-    private Long sedeId;
-
     @NotNull(message = "Tipo de actividad obligatorio")
     private Long tipoActividadId;
 }
