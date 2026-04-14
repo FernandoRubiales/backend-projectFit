@@ -5,6 +5,7 @@ import com.projectFit.fit_api.dto.ClaseResponseDTO;
 import com.projectFit.fit_api.entity.Clase;
 import com.projectFit.fit_api.entity.Socio;
 import com.projectFit.fit_api.entity.TipoActividad;
+import com.projectFit.fit_api.exception.ResourceNotFoundException;
 import com.projectFit.fit_api.mappers.ClaseMapper;
 import com.projectFit.fit_api.repository.ClaseRepository;
 import com.projectFit.fit_api.repository.SocioRepository;
@@ -25,21 +26,16 @@ import java.util.Locale;
 public class ClaseService {
 
     private final ClaseRepository claseRepository;
-    private final SedeRepository sedeRepository;
     private final TipoActividadRepository tipoActividadRepository;
     private final ClaseMapper claseMapper;
     private final SocioRepository socioRepository;
 
     //CREATE CLASE
     public ClaseResponseDTO crearClase(ClaseRequestDTO claseRequestDTO){
-        Sede sede = sedeRepository.findByIdAndFechaHoraBajaSedeIsNull(claseRequestDTO.getSedeId())
-                .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
-
         TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(claseRequestDTO.getTipoActividadId())
-                .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
 
         Clase clase = claseMapper.toEntity(claseRequestDTO);
-        clase.setSede(sede);
         clase.setTipoActividad(tipoActividad);
         return calcularCuposDisponibles(claseRepository.save(clase));
     }
@@ -47,19 +43,15 @@ public class ClaseService {
     //UPDATE CLASE
     public ClaseResponseDTO actualizarClase(Long id, ClaseRequestDTO claseRequestDTO){
         Clase claseExistente = claseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Clase no encontrada"));
-
-        Sede sede = sedeRepository.findByIdAndFechaHoraBajaSedeIsNull(claseRequestDTO.getSedeId())
-                .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Clase no encontrada"));
 
         TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(claseRequestDTO.getTipoActividadId())
-                .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
 
         claseExistente.setDiaSemana(claseRequestDTO.getDiaSemana());
         claseExistente.setCupoMaximo(claseRequestDTO.getCupoMaximo());
         claseExistente.setHoraInicio(claseRequestDTO.getHoraInicio());
         claseExistente.setHoraFin(claseRequestDTO.getHoraFin());
-        claseExistente.setSede(sede);
         claseExistente.setTipoActividad(tipoActividad);
 
         return calcularCuposDisponibles(claseRepository.save(claseExistente));
@@ -68,7 +60,7 @@ public class ClaseService {
     //DAR DE BAJA UNA CLASE
     public void darDeBajaClase(Long id){
         Clase claseExistente = claseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Clase no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Clase no encontrada"));
         claseExistente.setFechaHoraBajaClase(LocalDateTime.now());
         claseRepository.save(claseExistente);
     }
@@ -76,16 +68,8 @@ public class ClaseService {
     //GET CLASE POR ID
     public ClaseResponseDTO obtenerPorId(Long id) {
         Clase clase = claseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Clase no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Clase no encontrada"));
         return calcularCuposDisponibles(clase);
-    }
-
-    //GET CLASES POR SEDE
-    public List<ClaseResponseDTO> obtenerPorSede(Long sedeId) {
-        return claseRepository.clasesDisponiblesPorSede(sedeId)
-                .stream()
-                .map(this::calcularCuposDisponibles)
-                .toList();
     }
 
     //GET CLASES POR TIPO ACTIVIDAD
@@ -97,15 +81,15 @@ public class ClaseService {
     }
 
     //GET CLASES DISPONIBLES PARA RESERVAR SEGUN EL PLAN DEL SOCIO
-    public List<ClaseResponseDTO> obtenerClasesDisponiblesParaSocio(Long sedeId , String auth0Id){
+    public List<ClaseResponseDTO> obtenerClasesDisponiblesParaSocio(String auth0Id){
 
         Socio socio = socioRepository.findByAuth0Id(auth0Id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
 
         String diaActual = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es"));
         String diaFormateado = diaActual.substring(0,1).toUpperCase() + diaActual.substring(1);
 
-        return claseRepository.clasesDisponiblesParaSocio(sedeId, socio.getId(), diaFormateado)
+        return claseRepository.clasesDisponiblesParaSocio(socio.getId(), diaFormateado)
                 .stream()
                 .map(this::calcularCuposDisponibles)
                 .toList();

@@ -6,6 +6,8 @@ import com.projectFit.fit_api.entity.Clase;
 import com.projectFit.fit_api.entity.Reserva;
 import com.projectFit.fit_api.entity.Socio;
 import com.projectFit.fit_api.entity.SocioPlan;
+import com.projectFit.fit_api.exception.BusinessException;
+import com.projectFit.fit_api.exception.ResourceNotFoundException;
 import com.projectFit.fit_api.mappers.ReservaMapper;
 import com.projectFit.fit_api.repository.ClaseRepository;
 import com.projectFit.fit_api.repository.ReservaRepository;
@@ -33,22 +35,22 @@ public class ReservaService {
     //REALIZAR UNA RESERVA
     public ReservaResponseDTO realizarReserva(ReservaRequestDTO reservaRequestDTO, String auth0Id){
         Socio socio = socioRepository.findByAuth0Id(auth0Id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
 
         Clase clase = claseRepository.findById(reservaRequestDTO.getClaseId())
-                .orElseThrow(() -> new RuntimeException("Clase no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Clase no encontrada"));
 
         SocioPlan socioPlan = socioPlanRepository.planActivoporSocioyActividadId(socio.getId(), clase.getTipoActividad().getId())
-                .orElseThrow(() -> new RuntimeException("No tenés un plan activo para esta actividad"));
+                .orElseThrow(() -> new ResourceNotFoundException("No tenés un plan activo para esta actividad"));
 
         //Validar que le queden clases disponibles del plan para reservar
         if(socioPlan.getClasesDisponibles() <= 0){
-            throw new RuntimeException("No tenés clases disponibles en este plan");
+            throw new BusinessException("No tenés clases disponibles en este plan");
         }
         //Validar que no haya hecho una reserva en esa clase antes
         reservaRepository.reservaPorSocioyClaseId(socio.getId(), clase.getId())
                 .ifPresent(r -> {
-            throw new RuntimeException("Ya tenés una reserva para esta clase");
+            throw new BusinessException("Ya tenés una reserva para esta clase");
         });
 
         //Validar que no tenga reserva del mismo tipo de actividad, para el mismo dia
@@ -56,19 +58,19 @@ public class ReservaService {
                 socio.getId(), clase.getTipoActividad().getId());
 
         if(!reservasMismaActividad.isEmpty()){
-            throw new RuntimeException("Ya tenés una reserva de " + clase.getTipoActividad().getNombreTipoActividad() + " ese día");
+            throw new BusinessException("Ya tenés una reserva de " + clase.getTipoActividad().getNombreTipoActividad() + " ese día");
         }
         //Validar que en el mismo horario no tenga otra reserva ese dia
         List<Reserva> reservasMismoHorario = reservaRepository.reservasMismoHorario(
                 socio.getId(), clase.getHoraFin().toString(), clase.getHoraInicio().toString());
 
         if (!reservasMismoHorario.isEmpty()) {
-            throw new RuntimeException("Ya tenés una reserva en ese horario");
+            throw new BusinessException("Ya tenés una reserva en ese horario");
         }
         //Validar que hayan cupos disponibles para la clase que quiere reservar
         int cuposDisponibles = claseRepository.cuposDisponibles(clase.getId());
         if(cuposDisponibles <= 0){
-            throw new RuntimeException("No hay mas cupos disponibles para esta clase");
+            throw new BusinessException("No hay mas cupos disponibles para esta clase");
         }
         Reserva reserva = new Reserva();
         reserva.setClase(clase);
@@ -82,20 +84,20 @@ public class ReservaService {
     //CANCELAR UNA RESERVA
     public void cancelarReserva(Long reservaId, String auth0Id){
         Socio socio = socioRepository.findByAuth0Id(auth0Id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
 
         Reserva reserva = reservaRepository.findById(reservaId)
-                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada"));
 
         // Verificar que la reserva pertenece al socio
         if (!reserva.getSocioPlan().getSocio().getId().equals(socio.getId())) {
-            throw new RuntimeException("No podés cancelar esta reserva");
+            throw new BusinessException("No podés cancelar esta reserva");
         }
 
         //Verificar que falte 1 hora o mas para la clase, asi es posible cancelarla
         LocalTime horaMaximaPermitida = reserva.getClase().getHoraInicio().minusHours(1); //restamos 1 hora para el maximo limite
         if(LocalTime.now().isAfter(horaMaximaPermitida)){
-            throw new RuntimeException("No podes cancelar una reserva faltando menos de 1 hora para empezar la clase");
+            throw new BusinessException("No podes cancelar una reserva faltando menos de 1 hora para empezar la clase");
         }
 
         reservaRepository.delete(reserva);
@@ -104,7 +106,7 @@ public class ReservaService {
     //GET DE MIS RESERVAS
     public List<ReservaResponseDTO> obtenerMisReservas(String auth0Id){
         Socio socio = socioRepository.findByAuth0Id(auth0Id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
 
         return reservaRepository.obtenerTodasLasReservasDelSocio(socio.getId())
                 .stream()

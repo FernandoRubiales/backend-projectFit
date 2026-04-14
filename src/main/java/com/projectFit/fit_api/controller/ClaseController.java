@@ -41,12 +41,6 @@ public class ClaseController {
             @PathVariable Long id) {
         return ResponseEntity.ok(claseService.obtenerPorId(id));
     }
-    //GET POR SEDE
-    @GetMapping("/sede/{sedeId}")
-    public ResponseEntity<List<ClaseResponseDTO>> obtenerPorSede(
-            @PathVariable Long sedeId) {
-        return ResponseEntity.ok(claseService.obtenerPorSede(sedeId));
-    }
 
     //GET POR TIPO ACTIVIDAD
     @GetMapping("/tipo-actividad/{tipoActividadId}")
@@ -58,9 +52,8 @@ public class ClaseController {
     //GET CLASES DISPONIBLES PARA RESERVAR SEGUN EL PLAN DEL SOCIO
     @GetMapping("/disponibles")
     public ResponseEntity<List<ClaseResponseDTO>> obtenerClasesDisponiblesParaSocio(
-            @RequestParam Long sedeId,
             @RequestHeader ("X-Auth0-Id") String auth0Id){
-        return ResponseEntity.ok(claseService.obtenerClasesDisponiblesParaSocio(sedeId, auth0Id));
+        return ResponseEntity.ok(claseService.obtenerClasesDisponiblesParaSocio(auth0Id));
 
     }
 }

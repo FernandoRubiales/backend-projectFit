@@ -19,11 +19,6 @@ public interface ClaseRepository extends JpaRepository <Clase,Long> {
             "WHERE c.id = :claseId", nativeQuery = true)
     int cuposDisponibles(@Param("claseId") Long claseId);
 
-    //CLASES DISPONIBLES PARA UNA SEDE
-    @Query(value = "SELECT * FROM clase WHERE sede_id = :sedeId " +
-            "AND fecha_hora_baja_clase IS NULL",
-            nativeQuery = true)
-    List<Clase> clasesDisponiblesPorSede(@Param("sedeId") Long sedeId);
 
     //CLASES DISPONIBLES PARA UN TIPO DE ACTIVIDAD
     @Query(value = "SELECT * FROM clase WHERE tipo_actividad_id = :tipoActividadId"+
@@ -31,26 +26,13 @@ public interface ClaseRepository extends JpaRepository <Clase,Long> {
     List<Clase> clasesDisponiblesPorTipoActividad(@Param("tipoActividadId") Long tipoActividadId);
 
 
-    //CLASE ACTIVA POR SEDE Y RANGO HORARIO ACTUAL USADA PARA EL ESCANER Y VER QUE CLASE ESTA EN CURSO
-    @Query(value = "SELECT * FROM clase WHERE sede_id = :sedeId " +
-            "AND dia_semana = :diaSemana " +
-            "AND hora_inicio <= :horaActual " +
-            "AND hora_fin >= :horaActual " +
-            "AND fecha_hora_baja_clase IS NULL " +
-            "LIMIT 1",
-            nativeQuery = true)
-    Optional<Clase> claseEnCurso(@Param("sedeId") Long sedeId,
-                                 @Param("diaSemana") String diaSemana,
-                                 @Param("horaActual")LocalTime horaActual);
-
     //CLASES DONDE EL SOCIO PUEDE RESERVAR SEGUN SU PLAN ACTIVO
     @Query( value = "SELECT DISTINCT c.* FROM clase c " +
             "JOIN tipo_actividad ta ON c.tipo_actividad_id = ta.id " +
             "JOIN plan p ON p.tipo_actividad_id = ta.id " +
             "JOIN socio_plan sp ON sp.plan_id = p.id " +
             "JOIN estado_socio_plan esp ON sp.estado_id = esp.id " +
-            "WHERE c.sede_id = :sedeId " +
-            "AND  c.dia_semana = :diaActual" +
+            "WHERE  c.dia_semana = :diaActual" +
             "AND c.fecha_hora_baja_clase IS NULL " +
             "AND ta.requiere_reserva = true"+
             "AND esp.nombre_estado_socio_plan = 'Activo' " +
@@ -58,7 +40,6 @@ public interface ClaseRepository extends JpaRepository <Clase,Long> {
             "AND (SELECT c.cupo_maximo - COUNT(r.id) FROM reserva r " +
             "     WHERE r.clase_id = c.id) > 0"+
             "     AND r.fecha_clase_reservada = CURRENT_DATE) > 0", nativeQuery = true)
-    List<Clase> clasesDisponiblesParaSocio(@Param("sedeId") Long sedeId,
-                                           @Param("socioId") Long socioId,
+    List<Clase> clasesDisponiblesParaSocio(@Param("socioId") Long socioId,
                                            @Param("diaActual") String diaActual);
 }

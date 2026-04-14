@@ -4,6 +4,8 @@ import com.projectFit.fit_api.dto.PlanRequestDTO;
 import com.projectFit.fit_api.dto.PlanResponseDTO;
 import com.projectFit.fit_api.entity.Plan;
 import com.projectFit.fit_api.entity.TipoActividad;
+import com.projectFit.fit_api.exception.BusinessException;
+import com.projectFit.fit_api.exception.ResourceNotFoundException;
 import com.projectFit.fit_api.mappers.PlanMapper;
 import com.projectFit.fit_api.repository.PlanRepository;
 import com.projectFit.fit_api.repository.TipoActividadRepository;
@@ -26,10 +28,10 @@ public class PlanService {
     //CREATE PLAN
     public PlanResponseDTO crearPlan(PlanRequestDTO planRequestDTO){
         if(planRepository.existsByNombrePlan(planRequestDTO.getNombrePlan())){
-            throw new RuntimeException("Ya existe un plan con ese nombre");
+            throw new BusinessException("Ya existe un plan con ese nombre");
         }
         TipoActividad tipoActividad = tipoActividadRespository.findById(planRequestDTO.getTipoActividadId())
-                .orElseThrow(() -> new RuntimeException("No se encuentra ese tipo de actividad"));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encuentra ese tipo de actividad"));
 
         Plan plan = planMapper.toEntity(planRequestDTO);
         plan.setClasesIncluidas(planRequestDTO.getDiasPorSemana() * 4 ); //tomamos 4 semanas del mes
@@ -42,10 +44,10 @@ public class PlanService {
     //UPDATE PLAN
     public PlanResponseDTO actualizarPlan(Long id, PlanRequestDTO planRequestDTO){
         Plan planExistente = planRepository.findByIdAndFechaHoraBajaPlanIsNull(id).
-                orElseThrow(() -> new RuntimeException("Plan no encontrado"));
+                orElseThrow(() -> new ResourceNotFoundException("Plan no encontrado"));
 
         TipoActividad tipoActividad = tipoActividadRespository.findByIdAndFechaHoraBajaActividadIsNull(planRequestDTO.getTipoActividadId()).
-                orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+                orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
 
         planExistente.setNombrePlan(planRequestDTO.getNombrePlan());
         planExistente.setDescripcion(planRequestDTO.getDescripcion());
@@ -62,7 +64,7 @@ public class PlanService {
     //DELETE PLAN
     public void darDeBajaPlan(Long id){
         Plan planExistente = planRepository.findByIdAndFechaHoraBajaPlanIsNull(id)
-                .orElseThrow(() -> new RuntimeException("Plan no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Plan no encontrado"));
 
         planExistente.setFechaHoraBajaPlan(LocalDateTime.now());
         planRepository.save(planExistente);
@@ -71,7 +73,7 @@ public class PlanService {
     //GET PLAN por ID
     public PlanResponseDTO obtenerPorId(Long id){
         Plan planExistente = planRepository.findByIdAndFechaHoraBajaPlanIsNull(id)
-                .orElseThrow(() -> new RuntimeException("Plan no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Plan no encontrado"));
 
         return planMapper.toResponse(planExistente);
     }

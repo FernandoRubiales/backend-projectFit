@@ -6,6 +6,8 @@ import com.projectFit.fit_api.entity.EstadoSocioPlan;
 import com.projectFit.fit_api.entity.Plan;
 import com.projectFit.fit_api.entity.Socio;
 import com.projectFit.fit_api.entity.SocioPlan;
+import com.projectFit.fit_api.exception.BusinessException;
+import com.projectFit.fit_api.exception.ResourceNotFoundException;
 import com.projectFit.fit_api.mappers.SocioPlanMapper;
 import com.projectFit.fit_api.repository.*;
 import jakarta.transaction.Transactional;
@@ -29,20 +31,20 @@ public class SocioPlanService {
     //ELEGIR UN PLAN
     public SocioPlanResponseDTO elegirPlan(SocioPlanRequestDTO socioPlanRequestDTO, String auth0Id){
         Socio socio = socioRepository.findByAuth0Id(auth0Id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
 
         Plan plan = planRepository.findByIdAndFechaHoraBajaPlanIsNull(socioPlanRequestDTO.getPlanId())
-                .orElseThrow(() -> new RuntimeException("Plan no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Plan no encontrado"));
 
         //Comprobar que no tenga ese plan activo
         socioPlanRepository.planActivoporSocioyPlanId(socio.getId(), socioPlanRequestDTO.getPlanId())
                 .ifPresent(p -> {
-                    throw new RuntimeException("Ya tenés ese plan activo");
+                    throw new BusinessException("Ya tenés ese plan activo");
                 });
 
         //  Buscar el estado "Pendiente" de un socioPlan
         EstadoSocioPlan estadoSocioPlan = estadoSocioPlanRepository.findByNombreEstadoSocioPlan("Pendiente")
-                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Estado no encontrado"));
 
         SocioPlan socioPlan = new SocioPlan();
         socioPlan.setSocio(socio);
@@ -59,11 +61,11 @@ public class SocioPlanService {
     //CUANDO SE ACEPTE EL PAGO, SE ACTIVA EL PLAN DEL SOCIO
     public SocioPlanResponseDTO activarPlan(Long socioPlanId){
         SocioPlan socioPlan = socioPlanRepository.findById(socioPlanId)
-                .orElseThrow(() -> new RuntimeException("SocioPlan no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("SocioPlan no encontrado"));
 
         //Buscamos el estado Activo de socioPlan
         EstadoSocioPlan estadoSocioPlan = estadoSocioPlanRepository.findByNombreEstadoSocioPlan("Activo")
-                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Estado no encontrado"));
 
         socioPlan.setEstadoSocioPlan(estadoSocioPlan);
         socioPlan.setFechaInicioSocioPlan(LocalDateTime.now());
@@ -76,7 +78,7 @@ public class SocioPlanService {
     //GET DE LOS PLANES ACTIVOS DEL SOCIO
     public List<SocioPlanResponseDTO> obtenerPlanesActivos(String auth0Id){
         Socio socio = socioRepository.findByAuth0Id(auth0Id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
         return socioPlanRepository.planesActivosBySocioId(socio.getId())
                 .stream()
                 .map(socioPlanMapper::toResponse)
@@ -86,7 +88,7 @@ public class SocioPlanService {
     //GET DE PLANES PENDIENTES DEL SOCIO POR DNI
     public List<SocioPlanResponseDTO> obtenerPlanesPendientesPorDni(Long dni) {
         Socio socio = socioRepository.findByDni(dni)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
         return socioPlanRepository.planesPendientesPorSocioId(socio.getId())
                 .stream()
                 .map(socioPlanMapper::toResponse)

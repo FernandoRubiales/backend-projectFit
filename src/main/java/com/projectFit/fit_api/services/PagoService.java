@@ -4,6 +4,8 @@ import com.projectFit.fit_api.dto.PagoRequestDTO;
 import com.projectFit.fit_api.dto.PagoResponseDTO;
 import com.projectFit.fit_api.entity.Pago;
 import com.projectFit.fit_api.entity.SocioPlan;
+import com.projectFit.fit_api.exception.BusinessException;
+import com.projectFit.fit_api.exception.ResourceNotFoundException;
 import com.projectFit.fit_api.mappers.PagoMapper;
 import com.projectFit.fit_api.repository.PagoRepository;
 import com.projectFit.fit_api.repository.SocioPlanRepository;
@@ -26,7 +28,7 @@ public class PagoService {
     //PAGO EN EFECTIVO, REALIZADO POR RECEPCIONISTA
     public PagoResponseDTO realizarPagoEfectivo(PagoRequestDTO pagoRequestDTO){
         SocioPlan socioPlan = socioPlanRepository.findById(pagoRequestDTO.getSocioPlanId())
-                .orElseThrow(() -> new RuntimeException("SocioPlan no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("SocioPlan no encontrado"));
 
         Pago pago = new Pago();
         pago.setSocioPlan(socioPlan);
@@ -44,10 +46,10 @@ public class PagoService {
     //PAGO CON MERCADO PAGO REALIZADO POR LA APP, mp llama a este endpoint
     public void procesarWebhookMercadoPago(String mpPaymentId, Long socioPlanId){
         pagoRepository.findByMpPaymentId(mpPaymentId).ifPresent(p -> {
-            throw new RuntimeException("Pago ya procesado");
+            throw new BusinessException("Pago ya procesado");
         });
         SocioPlan socioPlan = socioPlanRepository.findById(socioPlanId)
-                .orElseThrow(() -> new RuntimeException("SocioPlan no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("SocioPlan no encontrado"));
 
         Pago pago = new Pago();
         pago.setSocioPlan(socioPlan);

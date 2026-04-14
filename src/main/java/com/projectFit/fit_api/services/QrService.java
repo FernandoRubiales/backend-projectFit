@@ -5,6 +5,7 @@ import com.projectFit.fit_api.dto.EscanerQrResponseDTO;
 import com.projectFit.fit_api.entity.Reserva;
 import com.projectFit.fit_api.entity.Socio;
 import com.projectFit.fit_api.entity.SocioPlan;
+import com.projectFit.fit_api.exception.ResourceNotFoundException;
 import com.projectFit.fit_api.repository.ReservaRepository;
 import com.projectFit.fit_api.repository.SocioPlanRepository;
 import com.projectFit.fit_api.repository.SocioRepository;
@@ -29,7 +30,7 @@ public class QrService {
 
         //Se busca al socio por su propio QR
         Socio socio = socioRepository.findByqrCode(escanerQrRequestDTO.getQrCode())
-                .orElseThrow(()-> new RuntimeException("Qr invalido, socio no encontrado"));
+                .orElseThrow(()-> new ResourceNotFoundException("Qr invalido, socio no encontrado"));
 
         //Buscar si tiene reserva para hoy en esa sede
         Reserva reserva = reservaRepository.reservaActivaPorSocio(socio.getId(), LocalTime.now().toString()).orElse(null);
@@ -52,7 +53,7 @@ public class QrService {
         }
         //VALIDACIONES PARA CLASES SIN RESERVA
         SocioPlan socioPlanSinReserva = socioPlanRepository.planActivoporSocio(socio.getId())
-                .orElseThrow(()-> new RuntimeException("No tenes plan activo"));
+                .orElseThrow(()-> new ResourceNotFoundException("No tenes plan activo"));
 
         //Descontamos la cantidad de clases disponibles que le quedan
         socioPlanSinReserva.setClasesDisponibles(socioPlanSinReserva.getClasesDisponibles() - 1);
