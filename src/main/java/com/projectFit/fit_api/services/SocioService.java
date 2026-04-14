@@ -7,6 +7,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.projectFit.fit_api.dto.SocioRequestDTO;
 import com.projectFit.fit_api.dto.SocioResponseDTO;
 import com.projectFit.fit_api.entity.Socio;
+import com.projectFit.fit_api.exception.BusinessException;
+import com.projectFit.fit_api.exception.ResourceNotFoundException;
 import com.projectFit.fit_api.mappers.SocioMapper;
 import com.projectFit.fit_api.repository.SocioRepository;
 import jakarta.transaction.Transactional;
@@ -29,10 +31,10 @@ public class SocioService {
     //CREATE SOCIO
     public SocioResponseDTO crearSocio(SocioRequestDTO socioRequestDTO){
         if (socioRepository.existsByDni(socioRequestDTO.getDni())) {
-            throw new RuntimeException("Ya existe un socio con ese DNI");
+            throw new BusinessException("Ya existe un socio con ese DNI");
         }
         if (socioRepository.existsByEmail(socioRequestDTO.getEmail())) {
-            throw new RuntimeException("Ya existe un socio con ese email");
+            throw new BusinessException("Ya existe un socio con ese email");
         }
 
         Socio socio = socioMapper.toEntity(socioRequestDTO);
@@ -44,7 +46,7 @@ public class SocioService {
     //UPDATE SOCIO
     public SocioResponseDTO actualizarSocio(Long id, SocioRequestDTO socioRequestDTO){
         Socio socioExistente = socioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
         socioExistente.setNombre(socioRequestDTO.getNombre());
         socioExistente.setApellido(socioRequestDTO.getApellido());
         socioExistente.setTelefono(socioRequestDTO.getTelefono());
@@ -57,14 +59,14 @@ public class SocioService {
     //DELETE SOCIO
     public void eliminarSocio(Long id) {
         Socio socioExistente = socioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
         socioRepository.delete(socioExistente);
     }
 
     //GET ID SOCIO
     public SocioResponseDTO obtenerPorId(Long id) {
         Socio socioExistente = socioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
         return socioMapper.toResponse(socioExistente);
     }
 
@@ -79,7 +81,7 @@ public class SocioService {
     //GENERAR IMAGEN QR
     public byte[] generarImagenQr(String auth0Id) throws Exception {
         Socio socio = socioRepository.findByAuth0Id(auth0Id)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(

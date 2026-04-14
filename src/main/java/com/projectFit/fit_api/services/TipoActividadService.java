@@ -3,6 +3,8 @@ package com.projectFit.fit_api.services;
 import com.projectFit.fit_api.dto.TipoActividadRequestDTO;
 import com.projectFit.fit_api.dto.TipoActividadResponseDTO;
 import com.projectFit.fit_api.entity.TipoActividad;
+import com.projectFit.fit_api.exception.BusinessException;
+import com.projectFit.fit_api.exception.ResourceNotFoundException;
 import com.projectFit.fit_api.mappers.TipoActividadMapper;
 import com.projectFit.fit_api.repository.TipoActividadRepository;
 import jakarta.transaction.Transactional;
@@ -23,7 +25,7 @@ public class TipoActividadService {
     //CREATE TipoActividad
     public TipoActividadResponseDTO crearActividad(TipoActividadRequestDTO tipoActividadRequestDTO){
         if(tipoActividadRepository.existsByNombreTipoActividad(tipoActividadRequestDTO.getNombreTipoActividad())){
-            throw new RuntimeException("Ya existe una actividad con ese nombre");
+            throw new BusinessException("Ya existe una actividad con ese nombre");
         }
         TipoActividad tipoActividad = tipoActividadMapper.toEntity(tipoActividadRequestDTO);
         TipoActividad tipoActividadGuardado = tipoActividadRepository.save(tipoActividad);
@@ -34,7 +36,7 @@ public class TipoActividadService {
     //UPDATE TipoActividad
     public TipoActividadResponseDTO actualizarActividad(Long id, TipoActividadRequestDTO tipoActividadRequestDTO){
         TipoActividad tipoActividadExistente = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(id)
-                .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
 
         tipoActividadExistente.setNombreTipoActividad(tipoActividadRequestDTO.getNombreTipoActividad());
         tipoActividadExistente.setDescripcion(tipoActividadRequestDTO.getDescripcion());
@@ -47,7 +49,7 @@ public class TipoActividadService {
     //DELETE TipoActividad
     public void darDeBajaActividad(Long id){
         TipoActividad tipoActividadExistente = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(id)
-                .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
 
         tipoActividadExistente.setFechaHoraBajaActividad(LocalDateTime.now());
         tipoActividadRepository.save(tipoActividadExistente);
@@ -56,7 +58,7 @@ public class TipoActividadService {
     //GET TipoActividad por ID
     public TipoActividadResponseDTO obtenerPorId(Long id){
         TipoActividad tipoActividad = tipoActividadRepository.findByIdAndFechaHoraBajaActividadIsNull(id)
-                .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
 
         return tipoActividadMapper.toResponse(tipoActividad);
     }
