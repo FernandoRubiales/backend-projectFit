@@ -6,6 +6,7 @@ server:
 spring:
   application:
     name: fit-api
+  
 
   datasource:
     url: jdbc:postgresql://localhost:5432/fit_db
@@ -37,3 +38,5 @@ app:
   notificaciones:
     dias-aviso-primero: 7
     dias-aviso-segundo: 1
+  auth0:
+    audience: https://fit-api.com
